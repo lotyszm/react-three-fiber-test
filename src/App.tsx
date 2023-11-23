@@ -1,6 +1,19 @@
 import { Canvas } from '@react-three/fiber'
 import './App.css'
 
+const Cube = ({position, color, size} : {
+  position: [number, number, number];
+  color: string;
+  size: [number, number, number];
+}) => {
+  return (
+    <mesh position={position}>
+      <boxGeometry attach="geometry" args={size} />
+      <meshStandardMaterial attach="material" color={color} />
+    </mesh>
+  )
+}
+
 const App = () => {
   
 
@@ -8,11 +21,15 @@ const App = () => {
     <>
       <Canvas>
         <ambientLight />
-        <pointLight position={[10, 10, 10]} />
-        <mesh rotation={[0, 10, 0]}>
-          <boxGeometry attach="geometry" args={[1, 1, 1]} />
-          <meshStandardMaterial attach="material" color={"#6be092"} />
-        </mesh>
+        <directionalLight position={[10, 10, 10]} />
+
+        <group position={[0, -1, 0]}>
+          <Cube position={[-1, 0, 0]} color={"#6be092"} size={[1, 1, 1]} />
+          <Cube position={[1, 0, 0]} color={"#6be092"} size={[1, 1, 1]} />
+          <Cube position={[-1, 2, 0]} color={"#6be092"} size={[1, 1, 1]} />
+          <Cube position={[1, 2, 0]} color={"#6be092"} size={[1, 1, 1]} />
+        </group>
+
       </Canvas>
     </>
   )
