@@ -1,6 +1,6 @@
 import { Canvas, MeshProps, useFrame } from '@react-three/fiber'
 import './App.css'
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 const Cube = ({position, color, size} : {
   position: [number, number, number];
@@ -35,6 +35,8 @@ const Sphere = ({position, color, args} : {
   args: [number, number, number];
 }) => {
 
+  const [colorState, setColorState] = useState(color)
+
   const ref = useRef<MeshProps>()
   // useFrame((state, delta) => {
   //     if(ref.current) {
@@ -49,9 +51,9 @@ const Sphere = ({position, color, args} : {
   // })
 
   return (
-    <mesh position={position} ref={ref}>
+    <mesh position={position} ref={ref} onPointerEnter={(event) => (event.stopPropagation(), setColorState(getRandomHexColor()))}>
       <sphereGeometry attach="geometry" args={args} />
-      <meshStandardMaterial attach="material" color={color} />
+      <meshStandardMaterial attach="material" color={colorState} />
     </mesh>
   )
 }
@@ -109,3 +111,13 @@ const App = () => {
 }
 
 export default App
+
+
+
+function getRandomHexColor() {
+  // Generate a random number between 0 and 16777215 (FFFFFF in hexadecimal)
+  const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+  
+  // Pad the color code with zeros if needed to ensure it has 6 digits
+  return "#" + "0".repeat(6 - randomColor.length) + randomColor;
+}
